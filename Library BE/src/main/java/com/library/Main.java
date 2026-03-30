@@ -2,6 +2,10 @@ package com.library;
 
 import com.library.dao.BookDAO;
 import com.library.ui.LibraryGUI;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
         try {
@@ -27,21 +32,15 @@ public class Main {
 
         } catch (Exception ignored) {}
 
-        Properties props = new Properties();
-        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("application.properties")) {
-            if (input == null) return;
-            props.load(input);
-        } catch (IOException ex) { return; }
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(Main.class)
+                .web(WebApplicationType.NONE)
+                .headless(false)
+                .run(args);
 
-        BookDAO bookDAO = new BookDAO(
-                props.getProperty("db.url"),
-                props.getProperty("db.user"),
-                props.getProperty("db.password")
-        );
+        BookDAO bookDAO = context.getBean(BookDAO.class);
 
         SwingUtilities.invokeLater(() -> {
-            LibraryGUI gui = new LibraryGUI(bookDAO);
-            gui.setVisible(true);
+            new LibraryGUI(bookDAO).setVisible(true);
         });
     }
 }

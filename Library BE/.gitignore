@@ -31,3 +31,4 @@ bin/
 application.properties
 
 .env
+.env.*
