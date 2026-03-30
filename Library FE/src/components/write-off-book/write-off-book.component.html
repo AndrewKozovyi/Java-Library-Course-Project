@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Списання книги</h2>
+
+<mat-dialog-content>
+  <div class="md-form-column">
+    <mat-form-field appearance="outline">
+      <mat-label>Оберіть книгу для списання</mat-label>
+      <input matInput [formControl]="bookControl" [matAutocomplete]="autoBook">
+      <mat-autocomplete #autoBook="matAutocomplete" [displayWith]="displayFn">
+        @for (book of filteredBooks; track book.id) {
+          <mat-option [value]="book">
+            {{book.author}} — "{{book.title}}" (Доступно: {{book.copies}})
+          </mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (bookControl.hasError('required')) {
+        <mat-error>Оберіть книгу зі списку</mat-error>
+      } @else if (bookControl.hasError('invalidBook')) {
+        <mat-error>Будь ласка, оберіть існуючу книгу з випадаючого списку</mat-error>
+      }
+    </mat-form-field>
+
+    @if (isBookSelected) {
+      <div class="counter-container">
+        <label>Кількість для списання</label>
+        <div class="counter-control">
+          <button type="button" tabindex="-1" (click)="decrement()">-</button>
+          <input type="number" [(ngModel)]="amount">
+          <button type="button" tabindex="-1" (click)="increment()">+</button>
+        </div>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="btn-cancel" (click)="dialogRef.close()">Скасувати</button>
+  <button class="btn-submit red" [disabled]="!isBookSelected || amount < 1" (click)="submit()">Списати</button>
+</mat-dialog-actions>

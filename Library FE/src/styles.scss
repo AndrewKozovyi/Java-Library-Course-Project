@@ -1,0 +1,113 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.mat-mdc-dialog-surface {
+  background-color: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mat-mdc-dialog-title, .mdc-dialog__title {
+  color: #212529 !important;
+}
+
+.mat-mdc-dialog-content, .mdc-dialog__content {
+  color: #495057 !important;
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(33, 37, 41, 0.4) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline {
+
+  .mat-mdc-text-field-wrapper {
+    background-color: #f8f9fa !important;
+    border-radius: 12px !important;
+    transition: background-color 0.2s ease;
+  }
+
+  .mdc-notched-outline {
+    border-color: #ced4da;
+    border-radius: 12px;
+  }
+
+  .mdc-floating-label {
+    color: #495057;
+  }
+
+  input.mat-mdc-input-element,
+  .mat-mdc-select-value-text,
+  .mdc-text-field__input {
+    color: #212529 !important;
+    font-weight: 500 !important;
+  }
+
+  &.mat-focused {
+    .mat-mdc-text-field-wrapper {
+      background-color: #e7f5ff !important;
+    }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #228be6 !important;
+    }
+
+    .mdc-floating-label {
+      color: #228be6 !important;
+    }
+  }
+}
+
+mat-dialog-actions button {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+  height: 48px;
+  text-transform: none;
+  border: none;
+  cursor: pointer;
+
+  &.btn-cancel {
+    background-color: #f1f3f5;
+    color: #495057;
+    &:hover { background-color: #e9ecef; }
+  }
+
+  &.btn-submit {
+    color: white;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+
+    &.green {
+      background-color: #2fb344;
+      box-shadow: 0 4px 14px rgba(47, 179, 68, 0.3);
+      &:hover { background-color: #218838; }
+    }
+
+    &.orange {
+      background-color: #f76707;
+      box-shadow: 0 4px 14px rgba(247, 103, 7, 0.3);
+      &:hover { background-color: #e86e10; }
+    }
+
+    &.red {
+      background-color: #d63939;
+      box-shadow: 0 4px 14px rgba(214, 57, 57, 0.3);
+      &:hover { background-color: #c82333; }
+    }
+
+    &[disabled] {
+      background-color: #ced4da !important;
+      color: #adb5bd !important;
+      box-shadow: none !important;
+      cursor: not-allowed;
+    }
+  }
+}

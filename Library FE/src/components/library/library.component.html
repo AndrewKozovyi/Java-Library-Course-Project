@@ -1,0 +1,61 @@
+<div class="library-container">
+  @if (toast) {
+    <div class="toast-container" [ngClass]="toast.type">
+      {{ toast.message }}
+    </div>
+  }
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+      <tr>
+        <th>№</th>
+        <th class="sortable" (click)="sortData('author')">
+          <div class="th-content">
+            Автор
+            @if (sortColumn === 'author') { <span class="sort-arrow">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span> }
+          </div>
+        </th>
+        <th class="sortable" (click)="sortData('title')">
+          <div class="th-content">
+            Назва
+            @if (sortColumn === 'title') { <span class="sort-arrow">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span> }
+          </div>
+        </th>
+        <th class="sortable" (click)="sortData('year')">
+          <div class="th-content">
+            Рік видання
+            @if (sortColumn === 'year') { <span class="sort-arrow">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span> }
+          </div>
+        </th>
+        <th class="sortable" (click)="sortData('copies')">
+          <div class="th-content">
+            Екземплярів
+            @if (sortColumn === 'copies') { <span class="sort-arrow">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span> }
+          </div>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (book of books; track book.id; let i = $index) {
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.year }}</td>
+            <td>{{ book.copies }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bottom-panel">
+    <div class="buttons">
+      <button class="btn-green" (click)="openAddModal()">Додати нову</button>
+      <button class="btn-orange" (click)="openReturnModal()">Повернути книгу</button>
+      <button class="btn-red" (click)="openWriteOffModal()">Списати книгу</button>
+      <span class="total-label">Всього записів: <strong>{{ books.length }}</strong></span>
+    </div>
+  </div>
+</div>

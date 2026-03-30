@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Додавання нової книги</h2>
+
+<mat-dialog-content [formGroup]="addForm">
+  <div class="md-form-column">
+    <mat-form-field appearance="outline">
+      <mat-label>Прізвище та ініціали автора</mat-label>
+      <input matInput formControlName="author" [matAutocomplete]="autoAuthor">
+      <mat-autocomplete #autoAuthor="matAutocomplete">
+        @for (author of filteredAuthors; track author) {
+          <mat-option [value]="author">{{author}}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (addForm.get('author')?.hasError('required')) {
+        <mat-error>Поле обов'язкове</mat-error>
+      } @else if (addForm.get('author')?.hasError('minlength')) {
+        <mat-error>Мінімум 3 символи</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Назва книги</mat-label>
+      <input matInput formControlName="title" [matAutocomplete]="autoTitle">
+      <mat-autocomplete #autoTitle="matAutocomplete">
+        @for (title of filteredTitles; track title) {
+          <mat-option [value]="title">{{title}}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (addForm.get('title')?.hasError('required')) {
+        <mat-error>Поле обов'язкове</mat-error>
+      } @else if (addForm.get('title')?.hasError('minlength')) {
+        <mat-error>Мінімум 3 символи</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Рік видання</mat-label>
+
+      <input matInput [matDatepicker]="picker" formControlName="year" [max]="maxDate" maxlength="4">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="multi-year" (yearSelected)="setYear($event, picker)"></mat-datepicker>
+
+      @if (addForm.get('year')?.hasError('required')) {
+        <mat-error>Оберіть або введіть рік</mat-error>
+      } @else if (addForm.get('year')?.hasError('matDatepickerMax')) {
+        <mat-error>Рік не може бути з майбутнього</mat-error>
+      } @else if (addForm.get('year')?.hasError('matDatepickerParse')) {
+        <mat-error>Введіть коректний рік (4 цифри)</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="counter-container">
+      <label>Кількість екземплярів</label>
+      <div class="counter-control" [class.invalid]="addForm.get('copies')?.invalid && addForm.get('copies')?.touched">
+        <button type="button" tabindex="-1" (click)="decrement()" [disabled]="addForm.get('copies')?.value <= 1">-</button>
+
+        <input type="number" formControlName="copies" min="1">
+
+        <button type="button" tabindex="-1" (click)="increment()">+</button>
+      </div>
+
+      @if (addForm.get('copies')?.hasError('min') || addForm.get('copies')?.hasError('required')) {
+        <mat-error style="font-size: 12px; margin-top: 4px;">Мінімум 1 екземпляр</mat-error>
+      }
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="btn-cancel" (click)="dialogRef.close()">Скасувати</button>
+  <button class="btn-submit green" [disabled]="addForm.invalid" (click)="submit()">Додати книгу</button>
+</mat-dialog-actions>

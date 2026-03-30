@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Повернення книги</h2>
+
+<mat-dialog-content [formGroup]="returnForm">
+  <div class="md-form-column">
+    <mat-form-field appearance="outline">
+      <mat-label>Автор</mat-label>
+      <input matInput formControlName="author" [matAutocomplete]="autoAuthor">
+      <mat-autocomplete #autoAuthor="matAutocomplete">
+        @for (author of filteredAuthors; track author) {
+          <mat-option [value]="author">{{author}}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (returnForm.get('author')?.hasError('required')) {
+        <mat-error>Поле обов'язкове</mat-error>
+      } @else if (returnForm.get('author')?.hasError('minlength')) {
+        <mat-error>Мінімум 3 символи</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Назва книги</mat-label>
+      <input matInput formControlName="title" [matAutocomplete]="autoTitle">
+      <mat-autocomplete #autoTitle="matAutocomplete">
+        @for (title of filteredTitles; track title) {
+          <mat-option [value]="title">{{title}}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (returnForm.get('title')?.hasError('required')) {
+        <mat-error>Поле обов'язкове</mat-error>
+      } @else if (returnForm.get('title')?.hasError('minlength')) {
+        <mat-error>Мінімум 3 символи</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="counter-container">
+      <label>Кількість для повернення</label>
+      <div class="counter-control">
+        <button type="button" tabindex="-1" (click)="decrement()">-</button>
+        <input type="number" formControlName="copies">
+        <button type="button" tabindex="-1" (click)="increment()">+</button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="btn-cancel" (click)="dialogRef.close()">Скасувати</button>
+  <button class="btn-submit orange" [disabled]="returnForm.invalid" (click)="submit()">Повернути</button>
+</mat-dialog-actions>
