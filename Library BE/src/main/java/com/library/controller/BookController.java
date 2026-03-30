@@ -11,7 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/books")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {
+    "http://localhost:4200",
+    "https://java-library-course-project.vercel.app/"
+})
 public class BookController {
 
     private final BookDAO bookDAO;
