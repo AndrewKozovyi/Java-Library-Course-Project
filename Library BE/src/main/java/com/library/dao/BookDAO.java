@@ -18,10 +18,17 @@ public class BookDAO {
     }
 
     private void initDatabase() {
-        String createAuthors = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='authors' AND xtype='U') "
-                + "CREATE TABLE authors (id INT IDENTITY(1,1) PRIMARY KEY, name NVARCHAR(255) UNIQUE NOT NULL)";
-        String createBooks = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='books' AND xtype='U') "
-                + "CREATE TABLE books (id INT IDENTITY(1,1) PRIMARY KEY, author_id INT NOT NULL, title NVARCHAR(255) NOT NULL, year INT NOT NULL, copies INT NOT NULL, FOREIGN KEY (author_id) REFERENCES authors(id))";
+        String createAuthors = "CREATE TABLE IF NOT EXISTS authors ("
+                + "id SERIAL PRIMARY KEY, "
+                + "name VARCHAR(255) UNIQUE NOT NULL)";
+
+        String createBooks = "CREATE TABLE IF NOT EXISTS books ("
+                + "id SERIAL PRIMARY KEY, "
+                + "author_id INT NOT NULL, "
+                + "title VARCHAR(255) NOT NULL, "
+                + "year INT NOT NULL, "
+                + "copies INT NOT NULL, "
+                + "FOREIGN KEY (author_id) REFERENCES authors(id))";
 
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
              Statement stmt = conn.createStatement()) {
@@ -67,7 +74,9 @@ public class BookDAO {
     }
 
     public boolean updateBookCopies(String author, String title, int addedCopies) throws SQLException {
-        String sql = "UPDATE b SET b.copies = b.copies + ? FROM books b INNER JOIN authors a ON b.author_id = a.id WHERE a.name = ? AND b.title = ?";
+        String sql = "UPDATE books SET copies = copies + ? WHERE id IN (" +
+                "SELECT b.id FROM books b JOIN authors a ON b.author_id = a.id " +
+                "WHERE a.name = ? AND b.title = ?)";
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, addedCopies);

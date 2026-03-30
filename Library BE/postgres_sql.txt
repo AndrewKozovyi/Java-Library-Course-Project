@@ -1,0 +1,126 @@
+DROP TABLE IF EXISTS books CASCADE;
+DROP TABLE IF EXISTS authors CASCADE;
+
+CREATE TABLE authors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    author_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    year INT NOT NULL,
+    copies INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE CASCADE
+);
+
+INSERT INTO authors (name) VALUES
+('Шевченко Т.Г.'), ('Симоненко В.А.'), ('Стус В.С.'), ('Семенко М.В.'), ('Жадан С.В.'),
+('Франко І.Я.'), ('Леся Українка'), ('Коцюбинський М.М.'), ('Нечуй-Левицький І.С.'),
+('Загребельний П.А.'), ('Костенко Л.В.'), ('Андрухович Ю.І.'), ('Кідрук М.І.'),
+('Багряний І.П.'), ('Підмогильний В.П.'), ('Оруелл Дж.'), ('Бредбері Р.'),
+('Ремарк Е.М.'), ('Кінг С.'), ('Кобилянська О.Ю.'), ('Винниченко В.К.'),
+('Довженко О.П.'), ('Гончар О.Т.'), ('Куліш П.О.'), ('Сковорода Г.С.'),
+('Стельмах М.П.'), ('Матіос М.В.'), ('Шкляр В.М.'), ('Дереш Л.'),
+('Самчук У.О.'), ('Хвильовий М.Г.'), ('Котляревський І.П.'), ('Рутківський В.Г.'),
+('Нестайко В.З.'), ('Крісті А.'), ('Толкін Дж.Р.Р.'), ('Роулінг Дж.К.'),
+('Дойл А.К.'), ('Маркес Г.Г.'), ('Гемінґвей Е.'), ('Кафка Ф.'), ('Сент-Екзюпері А.');
+
+-- 5. Заповнюємо книги
+INSERT INTO books (author_id, title, year, copies) VALUES
+((SELECT id FROM authors WHERE name = 'Шевченко Т.Г.'), 'Кобзар', 1840, 4),
+((SELECT id FROM authors WHERE name = 'Симоненко В.А.'), 'Ти знаєш, що ти — людина?', 2017, 3),
+((SELECT id FROM authors WHERE name = 'Стус В.С.'), 'Веселий цвинтар', 1971, 7),
+((SELECT id FROM authors WHERE name = 'Семенко М.В.'), 'Арії трьох П''єро', 1929, 11),
+((SELECT id FROM authors WHERE name = 'Жадан С.В.'), 'Інтернат', 2017, 4),
+((SELECT id FROM authors WHERE name = 'Франко І.Я.'), 'Захар Беркут', 1883, 5),
+((SELECT id FROM authors WHERE name = 'Франко І.Я.'), 'Перехресні стежки', 1900, 3),
+((SELECT id FROM authors WHERE name = 'Леся Українка'), 'Лісова пісня', 1911, 6),
+((SELECT id FROM authors WHERE name = 'Леся Українка'), 'Бояриня', 1913, 2),
+((SELECT id FROM authors WHERE name = 'Коцюбинський М.М.'), 'Тіні забутих предків', 1911, 4),
+((SELECT id FROM authors WHERE name = 'Коцюбинський М.М.'), 'Intermezzo', 1908, 3),
+((SELECT id FROM authors WHERE name = 'Нечуй-Левицький І.С.'), 'Кайдашева сім''я', 1878, 8),
+((SELECT id FROM authors WHERE name = 'Нечуй-Левицький І.С.'), 'Микола Джеря', 1878, 4),
+((SELECT id FROM authors WHERE name = 'Загребельний П.А.'), 'Роксолана', 1980, 5),
+((SELECT id FROM authors WHERE name = 'Загребельний П.А.'), 'Диво', 1968, 3),
+((SELECT id FROM authors WHERE name = 'Костенко Л.В.'), 'Маруся Чурай', 1979, 7),
+((SELECT id FROM authors WHERE name = 'Костенко Л.В.'), 'Триста поезій', 2012, 10),
+((SELECT id FROM authors WHERE name = 'Андрухович Ю.І.'), 'Московіада', 1993, 4),
+((SELECT id FROM authors WHERE name = 'Андрухович Ю.І.'), 'Рекреації', 1992, 2),
+((SELECT id FROM authors WHERE name = 'Кідрук М.І.'), 'Колонія', 2023, 12),
+((SELECT id FROM authors WHERE name = 'Кідрук М.І.'), 'Бот', 2012, 6),
+((SELECT id FROM authors WHERE name = 'Багряний І.П.'), 'Тигролови', 1944, 5),
+((SELECT id FROM authors WHERE name = 'Підмогильний В.П.'), 'Місто', 1928, 6),
+((SELECT id FROM authors WHERE name = 'Оруелл Дж.'), '1984', 1949, 15),
+((SELECT id FROM authors WHERE name = 'Оруелл Дж.'), 'Колгосп тварин', 1945, 10),
+((SELECT id FROM authors WHERE name = 'Бредбері Р.'), '451 градус за Фаренгейтом', 1953, 8),
+((SELECT id FROM authors WHERE name = 'Ремарк Е.М.'), 'Три товариші', 1936, 5),
+((SELECT id FROM authors WHERE name = 'Кінг С.'), 'Зелена миля', 1996, 7),
+((SELECT id FROM authors WHERE name = 'Кінг С.'), 'Сяйво', 1977, 4),
+((SELECT id FROM authors WHERE name = 'Кобилянська О.Ю.'), 'Земля', 1902, 5),
+((SELECT id FROM authors WHERE name = 'Кобилянська О.Ю.'), 'Царівна', 1896, 3),
+((SELECT id FROM authors WHERE name = 'Кобилянська О.Ю.'), 'Меланхолійний вальс', 1898, 4),
+((SELECT id FROM authors WHERE name = 'Винниченко В.К.'), 'Сонячна машина', 1928, 2),
+((SELECT id FROM authors WHERE name = 'Винниченко В.К.'), 'Записки кирпатого Мефістофеля', 1917, 3),
+((SELECT id FROM authors WHERE name = 'Довженко О.П.'), 'Зачарована Десна', 1956, 8),
+((SELECT id FROM authors WHERE name = 'Довженко О.П.'), 'Україна в огні', 1943, 6),
+((SELECT id FROM authors WHERE name = 'Гончар О.Т.'), 'Собор', 1968, 7),
+((SELECT id FROM authors WHERE name = 'Гончар О.Т.'), 'Тронка', 1963, 4),
+((SELECT id FROM authors WHERE name = 'Куліш П.О.'), 'Чорна рада', 1857, 10),
+((SELECT id FROM authors WHERE name = 'Сковорода Г.С.'), 'Байки харківські', 1774, 5),
+((SELECT id FROM authors WHERE name = 'Стельмах М.П.'), 'Гуси-лебеді летять', 1964, 6),
+((SELECT id FROM authors WHERE name = 'Матіос М.В.'), 'Солодка Даруся', 2004, 12),
+((SELECT id FROM authors WHERE name = 'Матіос М.В.'), 'Майже ніколи не навпаки', 2007, 4),
+((SELECT id FROM authors WHERE name = 'Шкляр В.М.'), 'Чорний Ворон', 2009, 15),
+((SELECT id FROM authors WHERE name = 'Шкляр В.М.'), 'Троща', 2017, 8),
+((SELECT id FROM authors WHERE name = 'Дереш Л.'), 'Культ', 2001, 3),
+((SELECT id FROM authors WHERE name = 'Дереш Л.'), 'Поклоніння ящірці', 2002, 4),
+((SELECT id FROM authors WHERE name = 'Самчук У.О.'), 'Марія', 1934, 5),
+((SELECT id FROM authors WHERE name = 'Самчук У.О.'), 'Волинь', 1937, 3),
+((SELECT id FROM authors WHERE name = 'Хвильовий М.Г.'), 'Я (Романтика)', 1924, 6),
+((SELECT id FROM authors WHERE name = 'Хвильовий М.Г.'), 'Санаторійна зона', 1924, 4),
+((SELECT id FROM authors WHERE name = 'Котляревський І.П.'), 'Енеїда', 1798, 11),
+((SELECT id FROM authors WHERE name = 'Котляревський І.П.'), 'Наталка Полтавка', 1819, 7),
+((SELECT id FROM authors WHERE name = 'Рутківський В.Г.'), 'Джури козака Швайки', 2007, 9),
+((SELECT id FROM authors WHERE name = 'Нестайко В.З.'), 'Тореадори з Васюківки', 1973, 14),
+((SELECT id FROM authors WHERE name = 'Нестайко В.З.'), 'В Країні Сонячних Зайчиків', 1959, 8),
+((SELECT id FROM authors WHERE name = 'Шевченко Т.Г.'), 'Гайдамаки', 1841, 6),
+((SELECT id FROM authors WHERE name = 'Шевченко Т.Г.'), 'Катерина', 1838, 5),
+((SELECT id FROM authors WHERE name = 'Франко І.Я.'), 'Зів''яле листя', 1896, 4),
+((SELECT id FROM authors WHERE name = 'Франко І.Я.'), 'Мойсей', 1905, 7),
+((SELECT id FROM authors WHERE name = 'Жадан С.В.'), 'Ворошиловград', 2010, 8),
+((SELECT id FROM authors WHERE name = 'Жадан С.В.'), 'Месопотамія', 2014, 5),
+((SELECT id FROM authors WHERE name = 'Кідрук М.І.'), 'Твердиня', 2013, 6),
+((SELECT id FROM authors WHERE name = 'Кідрук М.І.'), 'Де немає Бога', 2018, 9),
+((SELECT id FROM authors WHERE name = 'Андрухович Ю.І.'), 'Перверзія', 1996, 3),
+((SELECT id FROM authors WHERE name = 'Костенко Л.В.'), 'Записки українського самашедшого', 2010, 11),
+((SELECT id FROM authors WHERE name = 'Загребельний П.А.'), 'Я, Богдан', 1983, 4),
+((SELECT id FROM authors WHERE name = 'Крісті А.'), 'Десять негренят', 1939, 7),
+((SELECT id FROM authors WHERE name = 'Крісті А.'), 'Вбивство у Східному експресі', 1934, 5),
+((SELECT id FROM authors WHERE name = 'Толкін Дж.Р.Р.'), 'Гобіт', 1937, 10),
+((SELECT id FROM authors WHERE name = 'Толкін Дж.Р.Р.'), 'Володар перснів', 1954, 12),
+((SELECT id FROM authors WHERE name = 'Роулінг Дж.К.'), 'Гаррі Поттер і філософський камінь', 1997, 15),
+((SELECT id FROM authors WHERE name = 'Роулінг Дж.К.'), 'Гаррі Поттер і Таємна кімната', 1998, 10),
+((SELECT id FROM authors WHERE name = 'Дойл А.К.'), 'Пригоди Шерлока Холмса', 1892, 8),
+((SELECT id FROM authors WHERE name = 'Дойл А.К.'), 'Собака Баскервілів', 1902, 6),
+((SELECT id FROM authors WHERE name = 'Маркес Г.Г.'), 'Сто років самотності', 1967, 5),
+((SELECT id FROM authors WHERE name = 'Гемінґвей Е.'), 'Старий і море', 1952, 7),
+((SELECT id FROM authors WHERE name = 'Кафка Ф.'), 'Перевтілення', 1915, 4),
+((SELECT id FROM authors WHERE name = 'Сент-Екзюпері А.'), 'Маленький принц', 1943, 14);
+
+-- 6. Створюємо тригерну функцію
+CREATE OR REPLACE FUNCTION cleanup_orphan_authors()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM authors
+    WHERE id = OLD.author_id
+      AND NOT EXISTS (SELECT 1 FROM books WHERE author_id = OLD.author_id);
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_cleanup_orphan_authors
+AFTER DELETE ON books
+FOR EACH ROW
+EXECUTE FUNCTION cleanup_orphan_authors();
