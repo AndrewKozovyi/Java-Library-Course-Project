@@ -1,0 +1,215 @@
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'LibraryDB')
+BEGIN
+    CREATE DATABASE LibraryDB;
+END
+GO
+
+USE LibraryDB;
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='books' AND xtype='U')
+BEGIN
+    CREATE TABLE books (
+        id INT IDENTITY(1,1) PRIMARY KEY,
+        author NVARCHAR(255) NOT NULL,
+        title NVARCHAR(255) NOT NULL,
+        year INT NOT NULL,
+        copies INT NOT NULL
+    );
+END
+GO
+
+TRUNCATE TABLE books;
+GO
+
+INSERT INTO books (author, title, year, copies)
+VALUES
+    (N'Шевченко Т.Г.', N'Кобзар', 1840, 5),
+    (N'Симоненко В.А.', N'Ти знаєш, що ти — людина?', 2017, 3),
+    (N'Стус В.С.', N'Веселий цвинтар', 1971, 7),
+    (N'Семенко М.В.', N'Арії трьох П''єро', 1929, 12),
+    (N'Жадан С.В.', N'Інтернат', 2017, 4);
+GO
+
+IF OBJECT_ID('books', 'U') IS NOT NULL
+    DROP TABLE books;
+GO
+
+IF OBJECT_ID('authors', 'U') IS NOT NULL
+    DROP TABLE authors;
+GO
+
+CREATE TABLE authors (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(255) UNIQUE NOT NULL
+);
+GO
+
+CREATE TABLE books (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    author_id INT NOT NULL,
+    title NVARCHAR(255) NOT NULL,
+    year INT NOT NULL,
+    copies INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+);
+GO
+
+INSERT INTO authors (name) VALUES
+(N'Шевченко Т.Г.'),
+(N'Симоненко В.А.'),
+(N'Стус В.С.'),
+(N'Семенко М.В.'),
+(N'Жадан С.В.');
+GO
+
+INSERT INTO books (author_id, title, year, copies) VALUES
+(1, N'Кобзар', 1840, 4),
+(2, N'Ти знаєш, що ти — людина?', 2017, 3),
+(3, N'Веселий цвинтар', 1971, 7),
+(4, N'Арії трьох П''єро', 1929, 11),
+(5, N'Інтернат', 2017, 4);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Франко І.Я.') INSERT INTO authors (name) VALUES (N'Франко І.Я.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Леся Українка') INSERT INTO authors (name) VALUES (N'Леся Українка');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Коцюбинський М.М.') INSERT INTO authors (name) VALUES (N'Коцюбинський М.М.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Нечуй-Левицький І.С.') INSERT INTO authors (name) VALUES (N'Нечуй-Левицький І.С.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Загребельний П.А.') INSERT INTO authors (name) VALUES (N'Загребельний П.А.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Костенко Л.В.') INSERT INTO authors (name) VALUES (N'Костенко Л.В.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Андрухович Ю.І.') INSERT INTO authors (name) VALUES (N'Андрухович Ю.І.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Кідрук М.І.') INSERT INTO authors (name) VALUES (N'Кідрук М.І.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Багряний І.П.') INSERT INTO authors (name) VALUES (N'Багряний І.П.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Підмогильний В.П.') INSERT INTO authors (name) VALUES (N'Підмогильний В.П.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Оруелл Дж.') INSERT INTO authors (name) VALUES (N'Оруелл Дж.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Бредбері Р.') INSERT INTO authors (name) VALUES (N'Бредбері Р.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Ремарк Е.М.') INSERT INTO authors (name) VALUES (N'Ремарк Е.М.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Кінг С.') INSERT INTO authors (name) VALUES (N'Кінг С.');
+GO
+
+INSERT INTO books (author_id, title, year, copies) VALUES
+((SELECT id FROM authors WHERE name = N'Франко І.Я.'), N'Захар Беркут', 1883, 5),
+((SELECT id FROM authors WHERE name = N'Франко І.Я.'), N'Перехресні стежки', 1900, 3),
+((SELECT id FROM authors WHERE name = N'Леся Українка'), N'Лісова пісня', 1911, 6),
+((SELECT id FROM authors WHERE name = N'Леся Українка'), N'Бояриня', 1913, 2),
+((SELECT id FROM authors WHERE name = N'Коцюбинський М.М.'), N'Тіні забутих предків', 1911, 4),
+((SELECT id FROM authors WHERE name = N'Коцюбинський М.М.'), N'Intermezzo', 1908, 3),
+((SELECT id FROM authors WHERE name = N'Нечуй-Левицький І.С.'), N'Кайдашева сім''я', 1878, 8),
+((SELECT id FROM authors WHERE name = N'Нечуй-Левицький І.С.'), N'Микола Джеря', 1878, 4),
+((SELECT id FROM authors WHERE name = N'Загребельний П.А.'), N'Роксолана', 1980, 5),
+((SELECT id FROM authors WHERE name = N'Загребельний П.А.'), N'Диво', 1968, 3),
+((SELECT id FROM authors WHERE name = N'Костенко Л.В.'), N'Маруся Чурай', 1979, 7),
+((SELECT id FROM authors WHERE name = N'Костенко Л.В.'), N'Триста поезій', 2012, 10),
+((SELECT id FROM authors WHERE name = N'Андрухович Ю.І.'), N'Московіада', 1993, 4),
+((SELECT id FROM authors WHERE name = N'Андрухович Ю.І.'), N'Рекреації', 1992, 2),
+((SELECT id FROM authors WHERE name = N'Кідрук М.І.'), N'Колонія', 2023, 12),
+((SELECT id FROM authors WHERE name = N'Кідрук М.І.'), N'Бот', 2012, 6),
+((SELECT id FROM authors WHERE name = N'Багряний І.П.'), N'Тигролови', 1944, 5),
+((SELECT id FROM authors WHERE name = N'Підмогильний В.П.'), N'Місто', 1928, 6),
+((SELECT id FROM authors WHERE name = N'Оруелл Дж.'), N'1984', 1949, 15),
+((SELECT id FROM authors WHERE name = N'Оруелл Дж.'), N'Колгосп тварин', 1945, 10),
+((SELECT id FROM authors WHERE name = N'Бредбері Р.'), N'451 градус за Фаренгейтом', 1953, 8),
+((SELECT id FROM authors WHERE name = N'Ремарк Е.М.'), N'Три товариші', 1936, 5),
+((SELECT id FROM authors WHERE name = N'Кінг С.'), N'Зелена миля', 1996, 7),
+((SELECT id FROM authors WHERE name = N'Кінг С.'), N'Сяйво', 1977, 4);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Кобилянська О.Ю.') INSERT INTO authors (name) VALUES (N'Кобилянська О.Ю.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Винниченко В.К.') INSERT INTO authors (name) VALUES (N'Винниченко В.К.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Довженко О.П.') INSERT INTO authors (name) VALUES (N'Довженко О.П.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Гончар О.Т.') INSERT INTO authors (name) VALUES (N'Гончар О.Т.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Куліш П.О.') INSERT INTO authors (name) VALUES (N'Куліш П.О.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Сковорода Г.С.') INSERT INTO authors (name) VALUES (N'Сковорода Г.С.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Стельмах М.П.') INSERT INTO authors (name) VALUES (N'Стельмах М.П.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Матіос М.В.') INSERT INTO authors (name) VALUES (N'Матіос М.В.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Шкляр В.М.') INSERT INTO authors (name) VALUES (N'Шкляр В.М.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Дереш Л.') INSERT INTO authors (name) VALUES (N'Дереш Л.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Самчук У.О.') INSERT INTO authors (name) VALUES (N'Самчук У.О.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Хвильовий М.Г.') INSERT INTO authors (name) VALUES (N'Хвильовий М.Г.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Котляревський І.П.') INSERT INTO authors (name) VALUES (N'Котляревський І.П.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Рутківський В.Г.') INSERT INTO authors (name) VALUES (N'Рутківський В.Г.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Нестайко В.З.') INSERT INTO authors (name) VALUES (N'Нестайко В.З.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Шевченко Т.Г.') INSERT INTO authors (name) VALUES (N'Шевченко Т.Г.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Франко І.Я.') INSERT INTO authors (name) VALUES (N'Франко І.Я.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Жадан С.В.') INSERT INTO authors (name) VALUES (N'Жадан С.В.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Кідрук М.І.') INSERT INTO authors (name) VALUES (N'Кідрук М.І.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Андрухович Ю.І.') INSERT INTO authors (name) VALUES (N'Андрухович Ю.І.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Костенко Л.В.') INSERT INTO authors (name) VALUES (N'Костенко Л.В.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Загребельний П.А.') INSERT INTO authors (name) VALUES (N'Загребельний П.А.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Крісті А.') INSERT INTO authors (name) VALUES (N'Крісті А.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Толкін Дж.Р.Р.') INSERT INTO authors (name) VALUES (N'Толкін Дж.Р.Р.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Роулінг Дж.К.') INSERT INTO authors (name) VALUES (N'Роулінг Дж.К.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Дойл А.К.') INSERT INTO authors (name) VALUES (N'Дойл А.К.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Маркес Г.Г.') INSERT INTO authors (name) VALUES (N'Маркес Г.Г.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Гемінґвей Е.') INSERT INTO authors (name) VALUES (N'Гемінґвей Е.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Кафка Ф.') INSERT INTO authors (name) VALUES (N'Кафка Ф.');
+IF NOT EXISTS (SELECT 1 FROM authors WHERE name = N'Сент-Екзюпері А.') INSERT INTO authors (name) VALUES (N'Сент-Екзюпері А.');
+GO
+
+INSERT INTO books (author_id, title, year, copies) VALUES
+((SELECT id FROM authors WHERE name = N'Кобилянська О.Ю.'), N'Земля', 1902, 5),
+((SELECT id FROM authors WHERE name = N'Кобилянська О.Ю.'), N'Царівна', 1896, 3),
+((SELECT id FROM authors WHERE name = N'Кобилянська О.Ю.'), N'Меланхолійний вальс', 1898, 4),
+((SELECT id FROM authors WHERE name = N'Винниченко В.К.'), N'Сонячна машина', 1928, 2),
+((SELECT id FROM authors WHERE name = N'Винниченко В.К.'), N'Записки кирпатого Мефістофеля', 1917, 3),
+((SELECT id FROM authors WHERE name = N'Довженко О.П.'), N'Зачарована Десна', 1956, 8),
+((SELECT id FROM authors WHERE name = N'Довженко О.П.'), N'Україна в огні', 1943, 6),
+((SELECT id FROM authors WHERE name = N'Гончар О.Т.'), N'Собор', 1968, 7),
+((SELECT id FROM authors WHERE name = N'Гончар О.Т.'), N'Тронка', 1963, 4),
+((SELECT id FROM authors WHERE name = N'Куліш П.О.'), N'Чорна рада', 1857, 10),
+((SELECT id FROM authors WHERE name = N'Сковорода Г.С.'), N'Байки харківські', 1774, 5),
+((SELECT id FROM authors WHERE name = N'Стельмах М.П.'), N'Гуси-лебеді летять', 1964, 6),
+((SELECT id FROM authors WHERE name = N'Матіос М.В.'), N'Солодка Даруся', 2004, 12),
+((SELECT id FROM authors WHERE name = N'Матіос М.В.'), N'Майже ніколи не навпаки', 2007, 4),
+((SELECT id FROM authors WHERE name = N'Шкляр В.М.'), N'Чорний Ворон', 2009, 15),
+((SELECT id FROM authors WHERE name = N'Шкляр В.М.'), N'Троща', 2017, 8),
+((SELECT id FROM authors WHERE name = N'Дереш Л.'), N'Культ', 2001, 3),
+((SELECT id FROM authors WHERE name = N'Дереш Л.'), N'Поклоніння ящірці', 2002, 4),
+((SELECT id FROM authors WHERE name = N'Самчук У.О.'), N'Марія', 1934, 5),
+((SELECT id FROM authors WHERE name = N'Самчук У.О.'), N'Волинь', 1937, 3),
+((SELECT id FROM authors WHERE name = N'Хвильовий М.Г.'), N'Я (Романтика)', 1924, 6),
+((SELECT id FROM authors WHERE name = N'Хвильовий М.Г.'), N'Санаторійна зона', 1924, 4),
+((SELECT id FROM authors WHERE name = N'Котляревський І.П.'), N'Енеїда', 1798, 11),
+((SELECT id FROM authors WHERE name = N'Котляревський І.П.'), N'Наталка Полтавка', 1819, 7),
+((SELECT id FROM authors WHERE name = N'Рутківський В.Г.'), N'Джури козака Швайки', 2007, 9),
+((SELECT id FROM authors WHERE name = N'Нестайко В.З.'), N'Тореадори з Васюківки', 1973, 14),
+((SELECT id FROM authors WHERE name = N'Нестайко В.З.'), N'В Країні Сонячних Зайчиків', 1959, 8),
+((SELECT id FROM authors WHERE name = N'Шевченко Т.Г.'), N'Гайдамаки', 1841, 6),
+((SELECT id FROM authors WHERE name = N'Шевченко Т.Г.'), N'Катерина', 1838, 5),
+((SELECT id FROM authors WHERE name = N'Франко І.Я.'), N'Зів''яле листя', 1896, 4),
+((SELECT id FROM authors WHERE name = N'Франко І.Я.'), N'Мойсей', 1905, 7),
+((SELECT id FROM authors WHERE name = N'Жадан С.В.'), N'Ворошиловград', 2010, 8),
+((SELECT id FROM authors WHERE name = N'Жадан С.В.'), N'Месопотамія', 2014, 5),
+((SELECT id FROM authors WHERE name = N'Кідрук М.І.'), N'Твердиня', 2013, 6),
+((SELECT id FROM authors WHERE name = N'Кідрук М.І.'), N'Де немає Бога', 2018, 9),
+((SELECT id FROM authors WHERE name = N'Андрухович Ю.І.'), N'Перверзія', 1996, 3),
+((SELECT id FROM authors WHERE name = N'Костенко Л.В.'), N'Записки українського самашедшого', 2010, 11),
+((SELECT id FROM authors WHERE name = N'Загребельний П.А.'), N'Я, Богдан', 1983, 4),
+((SELECT id FROM authors WHERE name = N'Крісті А.'), N'Десять негренят', 1939, 7),
+((SELECT id FROM authors WHERE name = N'Крісті А.'), N'Вбивство у Східному експресі', 1934, 5),
+((SELECT id FROM authors WHERE name = N'Толкін Дж.Р.Р.'), N'Гобіт', 1937, 10),
+((SELECT id FROM authors WHERE name = N'Толкін Дж.Р.Р.'), N'Володар перснів', 1954, 12),
+((SELECT id FROM authors WHERE name = N'Роулінг Дж.К.'), N'Гаррі Поттер і філософський камінь', 1997, 15),
+((SELECT id FROM authors WHERE name = N'Роулінг Дж.К.'), N'Гаррі Поттер і Таємна кімната', 1998, 10),
+((SELECT id FROM authors WHERE name = N'Дойл А.К.'), N'Пригоди Шерлока Холмса', 1892, 8),
+((SELECT id FROM authors WHERE name = N'Дойл А.К.'), N'Собака Баскервілів', 1902, 6),
+((SELECT id FROM authors WHERE name = N'Маркес Г.Г.'), N'Сто років самотності', 1967, 5),
+((SELECT id FROM authors WHERE name = N'Гемінґвей Е.'), N'Старий і море', 1952, 7),
+((SELECT id FROM authors WHERE name = N'Кафка Ф.'), N'Перевтілення', 1915, 4),
+((SELECT id FROM authors WHERE name = N'Сент-Екзюпері А.'), N'Маленький принц', 1943, 14);
+GO
+
+CREATE TRIGGER trg_CleanupOrphanAuthors
+ON Books
+AFTER DELETE
+AS
+BEGIN
+    DELETE FROM Authors
+    WHERE id IN (
+        SELECT d.author_id
+        FROM deleted d
+        WHERE NOT EXISTS (
+            SELECT 1 FROM Books b WHERE b.author_id = d.author_id
+        )
+    );
+END;
